@@ -77,7 +77,6 @@ const photos = await Promise.all(
 
 // Determine if EXIF should be shown
 const showExif = exifDisplay === 'on' || (exifDisplay === 'inherit' && exifConfig.defaultDisplay);
-const fieldsToShow = exifFields || exifConfig.defaultFields;
 ---
 
 <BaseLayout title={`${title} - Dan Cardamore`} description={description || `Photography project: ${title}`}>
@@ -103,7 +102,6 @@ const fieldsToShow = exifFields || exifConfig.defaultFields;
     <PhotoGallery
       photos={photos}
       showExif={showExif}
-      exifFields={fieldsToShow}
     />
   </div>
 </BaseLayout>

@@ -1,45 +1,36 @@
 ---
 import type { PhotoExif } from '../utils/exif';
-import { exifConfig, type ExifFieldKey } from '../config/exif';
 
 interface Props {
   exif: PhotoExif;
-  fields?: ExifFieldKey[];
 }
 
-const { exif, fields = exifConfig.defaultFields } = Astro.props;
+const { exif } = Astro.props;
 
-const displayData = fields
-  .map(field => ({
-    label: exifConfig.availableFields[field],
-    value: formatValue(field, exif[field as keyof PhotoExif])
-  }))
-  .filter(item => item.value);
+// Only show: Model, Lens, Date (no labels)
+const displayValues: string[] = [];
 
-function formatValue(field: ExifFieldKey, value: any): string | null {
-  if (value === undefined || value === null) return null;
+if (exif.model) {
+  displayValues.push(exif.model);
+}
 
-  if (field === 'fNumber') {
-    return `f/${value}`;
-  }
-  if (field === 'focalLength') {
-    return `${value}mm`;
-  }
-  if (field === 'dateTime' && value instanceof Date) {
-    return value.toLocaleDateString();
-  }
+if (exif.lens) {
+  displayValues.push(exif.lens);
+}
 
-  return String(value);
+if (exif.dateTime) {
+  // Format date without time
+  const dateStr = exif.dateTime.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  displayValues.push(dateStr);
 }
 ---
 
-{displayData.length > 0 && (
-  <div class="text-xs text-gray-500 space-y-0.5">
-    {displayData.map(({ label, value }) => (
-      <div class="flex gap-2">
-        <span class="text-gray-400">{label}:</span>
-        <span>{value}</span>
-      </div>
-    ))}
+{displayValues.length > 0 && (
+  <div class="text-xs text-gray-500">
+    {displayValues.join(' · ')}
   </div>
 )}

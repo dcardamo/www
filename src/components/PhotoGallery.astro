@@ -3,7 +3,6 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import ExifDisplay from './ExifDisplay.astro';
 import type { PhotoExif } from '../utils/exif';
-import type { ExifFieldKey } from '../config/exif';
 
 interface Photo {
   image: ImageMetadata;
@@ -13,10 +12,9 @@ interface Photo {
 interface Props {
   photos: Photo[];
   showExif?: boolean;
-  exifFields?: ExifFieldKey[];
 }
 
-const { photos, showExif = false, exifFields } = Astro.props;
+const { photos, showExif = false } = Astro.props;
 ---
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -33,7 +31,7 @@ const { photos, showExif = false, exifFields } = Astro.props;
         />
       </div>
       {showExif && exif && (
-        <ExifDisplay exif={exif} fields={exifFields} />
+        <ExifDisplay exif={exif} />
       )}
     </div>
   ))}
