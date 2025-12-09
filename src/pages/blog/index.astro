@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostCard from '../../components/BlogPostCard.astro';
+
+const posts = await getCollection('blog');
+const sortedPosts = posts.sort((a, b) =>
+  new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
+);
+---
+
+<BaseLayout title="Blog - Dan Cardamore" description="Thoughts and writings by Dan Cardamore">
+  <div class="max-w-3xl mx-auto space-y-12">
+    <div class="space-y-4">
+      <h1 class="text-4xl font-light">Blog</h1>
+      <p class="text-lg text-gray-600">Thoughts, stories, and ideas</p>
+    </div>
+
+    <div class="space-y-8">
+      {sortedPosts.map(post => (
+        <BlogPostCard post={post} />
+      ))}
+    </div>
+  </div>
+</BaseLayout>

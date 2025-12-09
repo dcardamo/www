@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { humanizeProjectName, findCoverImage, getNewestPhotoDate } from '../../utils/projects';
+
+// Discover all projects from www/ directory
+const wwwImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/www/**/*.{jpg,jpeg,JPG,JPEG}', { eager: true });
+
+// Group images by project folder
+const projectsMap = new Map();
+for (const [path, module] of Object.entries(wwwImages)) {
+  // Extract project slug from path: /src/content/www/Street/IMG_001.jpg -> Street
+  const match = path.match(/\/src\/content\/www\/(.+?)\//);
+  if (!match) continue;
+
+  const projectSlug = match[1];
+  const filename = path.split('/').pop() || '';
+
+  if (!projectsMap.has(projectSlug)) {
+    projectsMap.set(projectSlug, []);
+  }
+
+  projectsMap.get(projectSlug).push({
+    path,
+    image: module.default,
+    filename
+  });
+}
+
+// Load metadata for projects that have it
+const projectMetadata = await getCollection('photoProjects');
+const metadataMap = new Map(projectMetadata.map(p => [p.id, p]));
+
+// Build project list with metadata (manual or auto-generated)
+const projects = await Promise.all(
+  Array.from(projectsMap.entries()).map(async ([slug, images]) => {
+    const metadata = metadataMap.get(slug);
+    const coverImage = await findCoverImage(images, metadata?.data.coverImage);
+    const date = metadata?.data.date || await getNewestPhotoDate(images);
+
+    return {
+      slug,
+      title: metadata?.data.title || humanizeProjectName(slug),
+      description: metadata?.data.description || '',
+      date,
+      coverImage: coverImage?.image,
+      imageCount: images.length
+    };
+  })
+);
+
+// Sort by date (newest first)
+const sortedProjects = projects.sort((a, b) =>
+  new Date(b.date).getTime() - new Date(a.date).getTime()
+);
+---
+
+<BaseLayout title="Portfolio - Dan Cardamore" description="Photography portfolio by Dan Cardamore">
+  <div class="max-w-6xl mx-auto space-y-12">
+    <div class="space-y-4">
+      <h1 class="text-4xl font-light">Portfolio</h1>
+      <p class="text-lg text-gray-600">A collection of my photography projects</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedProjects.map(project => (
+        project.coverImage && (
+          <a
+            href={`/portfolio/${project.slug}`}
+            class="group block space-y-4"
+          >
+            <div class="overflow-hidden border border-gray-200">
+              <img
+                src={project.coverImage.src}
+                alt={project.title}
+                width={project.coverImage.width}
+                height={project.coverImage.height}
+                class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+            <div class="space-y-2">
+              <h2 class="text-xl font-normal group-hover:text-gray-600 transition-colors">
+                {project.title}
+              </h2>
+              <p class="text-sm text-gray-500">{new Date(project.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</p>
+              {project.description && (
+                <p class="text-sm text-gray-700 line-clamp-2">{project.description}</p>
+              )}
+              <p class="text-xs text-gray-400">{project.imageCount} photos</p>
+            </div>
+          </a>
+        )
+      ))}
+    </div>
+  </div>
+</BaseLayout>

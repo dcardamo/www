@@ -1,0 +1,40 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  project: CollectionEntry<'photoProjects'>;
+  coverImageSrc: any;
+}
+
+const { project, coverImageSrc } = Astro.props;
+const { title, description, date } = project.data;
+
+const formattedDate = new Date(date).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<a
+  href={`/portfolio/${project.id}`}
+  class="group block space-y-4"
+>
+  <div class="overflow-hidden border border-gray-200">
+    <Image
+      src={coverImageSrc}
+      alt={title}
+      widths={[400, 800]}
+      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
+    />
+  </div>
+  <div class="space-y-2">
+    <h2 class="text-xl font-normal group-hover:text-gray-600 transition-colors">
+      {title}
+    </h2>
+    <p class="text-sm text-gray-500">{formattedDate}</p>
+    <p class="text-sm text-gray-700 line-clamp-2">{description}</p>
+  </div>
+</a>

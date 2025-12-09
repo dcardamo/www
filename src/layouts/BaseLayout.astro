@@ -1,0 +1,65 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Personal photography portfolio and blog by Dan Cardamore' } = Astro.props;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {canonicalURL && <link rel="canonical" href={canonicalURL} />}
+
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonicalURL && <meta property="og:url" content={canonicalURL} />}
+    <meta property="og:site_name" content="Dan Cardamore" />
+    <meta property="og:type" content="website" />
+  </head>
+  <body class="min-h-screen bg-white text-gray-900 font-light">
+    <header class="border-b border-gray-200">
+      <nav class="container mx-auto px-6 py-6">
+        <div class="flex items-center justify-between">
+          <a href="/" class="text-xl font-normal hover:text-gray-600 transition-colors">
+            Dan Cardamore
+          </a>
+          <ul class="flex gap-8 text-sm">
+            <li>
+              <a href="/" class="hover:text-gray-600 transition-colors">Home</a>
+            </li>
+            <li>
+              <a href="/portfolio" class="hover:text-gray-600 transition-colors">Portfolio</a>
+            </li>
+            <li>
+              <a href="/blog" class="hover:text-gray-600 transition-colors">Blog</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-200 mt-24">
+      <div class="container mx-auto px-6 py-8">
+        <p class="text-sm text-gray-500 text-center">
+          © {new Date().getFullYear()} Dan Cardamore. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.id },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, description, pubDate, updatedDate, author, tags } = post.data;
+
+const formattedPubDate = new Date(pubDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+const formattedUpdatedDate = updatedDate ? new Date(updatedDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+}) : null;
+---
+
+<BaseLayout title={`${title} - Dan Cardamore`} description={description}>
+  <article class="max-w-3xl mx-auto space-y-8">
+    <div class="space-y-4">
+      <a href="/blog" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+        ← Back to Blog
+      </a>
+      <div class="space-y-2">
+        <h1 class="text-4xl font-light">{title}</h1>
+        <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+          <time datetime={pubDate.toISOString()}>Published {formattedPubDate}</time>
+          {formattedUpdatedDate && (
+            <time datetime={updatedDate.toISOString()}>Updated {formattedUpdatedDate}</time>
+          )}
+          <span>by {author}</span>
+        </div>
+        {tags && tags.length > 0 && (
+          <div class="flex flex-wrap gap-2 pt-2">
+            {tags.map(tag => (
+              <span class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+
+    <div class="prose prose-lg prose-gray max-w-none">
+      <Content />
+    </div>
+  </article>
+</BaseLayout>

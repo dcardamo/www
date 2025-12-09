@@ -1,16 +1,133 @@
 ---
+import { getCollection } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogPostCard from '../components/BlogPostCard.astro';
+import { findCoverImage } from '../utils/projects';
 
+// Get featured photo projects (only those with metadata and featured: true)
+const projects = await getCollection('photoProjects', ({ data }) => data.featured === true);
+const featuredProjects = projects
+  .sort((a, b) => new Date(b.data.date || 0).getTime() - new Date(a.data.date || 0).getTime())
+  .slice(0, 3);
+
+// Load cover images from www/ for featured projects
+const wwwImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/www/**/*.{jpg,jpeg,JPG,JPEG}', { eager: true });
+
+const projectsWithCovers = await Promise.all(
+  featuredProjects.map(async (project) => {
+    // Get all images for this project from www/
+    const projectImages = Object.entries(wwwImages)
+      .filter(([path]) => path.startsWith(`/src/content/www/${project.id}/`))
+      .map(([path, module]) => ({
+        path,
+        image: module.default,
+        filename: path.split('/').pop() || ''
+      }));
+
+    // Find cover image
+    const coverImage = await findCoverImage(projectImages, project.data.coverImage);
+
+    return {
+      project,
+      coverImage: coverImage?.image
+    };
+  })
+);
+
+// Get recent blog posts
+const posts = await getCollection('blog');
+const recentPosts = posts
+  .sort((a, b) => new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime())
+  .slice(0, 5);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout
+  title="Dan Cardamore - Photography & Blog"
+  description="Personal website of Dan Cardamore featuring photography portfolio and blog"
+>
+  <div class="space-y-20">
+    <!-- Featured Projects Section -->
+    {projectsWithCovers.length > 0 && (
+      <section class="space-y-8">
+        <div class="flex items-center justify-between">
+          <h2 class="text-3xl font-light">Featured Projects</h2>
+          <a
+            href="/portfolio"
+            class="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            View all →
+          </a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {projectsWithCovers.map(({ project, coverImage }) => (
+            coverImage && (
+              <a
+                href={`/portfolio/${project.id}`}
+                class="group block space-y-4"
+              >
+                <div class="overflow-hidden border border-gray-200">
+                  <img
+                    src={coverImage.src}
+                    alt={project.data.title}
+                    width={coverImage.width}
+                    height={coverImage.height}
+                    class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <h2 class="text-xl font-normal group-hover:text-gray-600 transition-colors">
+                    {project.data.title}
+                  </h2>
+                  {project.data.date && (
+                    <p class="text-sm text-gray-500">{new Date(project.data.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}</p>
+                  )}
+                  {project.data.description && (
+                    <p class="text-sm text-gray-700 line-clamp-2">{project.data.description}</p>
+                  )}
+                </div>
+              </a>
+            )
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Recent Posts Section -->
+    {recentPosts.length > 0 && (
+      <section class="space-y-8">
+        <div class="flex items-center justify-between">
+          <h2 class="text-3xl font-light">Recent Posts</h2>
+          <a
+            href="/blog"
+            class="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            View all →
+          </a>
+        </div>
+        <div class="max-w-3xl space-y-8">
+          {recentPosts.map(post => (
+            <BlogPostCard post={post} />
+          ))}
+        </div>
+      </section>
+    )}
+
+    <!-- Welcome message if no content -->
+    {projectsWithCovers.length === 0 && recentPosts.length === 0 && (
+      <div class="text-center py-20 space-y-4">
+        <h1 class="text-4xl font-light">Welcome</h1>
+        <p class="text-lg text-gray-600">
+          This is the personal website of Dan Cardamore
+        </p>
+        <p class="text-gray-500">
+          Photography portfolio and blog coming soon
+        </p>
+      </div>
+    )}
+  </div>
+</BaseLayout>
