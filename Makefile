@@ -8,8 +8,6 @@ install:
 # Remove build artifacts and dependencies
 clean:
 	rm -rf dist
-	rm -rf node_modules
-	rm -rf .astro
 
 # Start development server
 dev:
