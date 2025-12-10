@@ -6,4 +6,4 @@ featured: true
 exifDisplay: "on"
 ---
 
-Exploring the culture, landscapes, and daily life of Japan through photography.
+Travel to Japan in Tokyo, Nara, Kyoto, Hiroshima, and Hakone.
