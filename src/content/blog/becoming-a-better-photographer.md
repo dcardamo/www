@@ -3,6 +3,7 @@ title: "Becoming A Better Photographer"
 description: "My journey and plan for improving my photography skills through education, practice, and mentorship"
 pubDate: 2024-03-05
 author: "Dan"
+status: "published"
 featured: false
 tags: ["photography", "learning", "improvement"]
 ---
