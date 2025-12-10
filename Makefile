@@ -1,4 +1,4 @@
-.PHONY: clean dev build install
+.PHONY: clean dev build install deploy
 
 # Install dependencies and disable telemetry
 install:
@@ -17,4 +17,9 @@ dev:
 
 # Build for production
 build:
+	npm run build
+
+# Pull latest changes and build
+update:
+	git pull
 	npm run build
