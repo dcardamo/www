@@ -9,6 +9,8 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@fontsource-variable/newsreader": "^5.2.10",
+    "@fontsource/inter": "^5.2.8",
     "@tailwindcss/vite": "^4.1.17",
     "astro": "^5.16.4",
     "exifr": "^7.1.3",
