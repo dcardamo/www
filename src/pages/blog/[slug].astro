@@ -30,12 +30,12 @@ const formattedUpdatedDate = updatedDate ? new Date(updatedDate).toLocaleDateStr
 <BaseLayout title={`${title} - Dan Cardamore`} description={description}>
   <article class="max-w-3xl mx-auto space-y-8">
     <div class="space-y-4">
-      <a href="/blog" class="text-sm text-gray-500 hover:text-gray-700 transition-colors">
+      <a href="/blog" class="text-sm hover:opacity-70 transition-opacity" style="color: var(--color-text-muted);">
         ← Back to Blog
       </a>
       <div class="space-y-2">
         <h1 class="text-4xl font-light">{title}</h1>
-        <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+        <div class="flex flex-wrap gap-4 text-sm" style="color: var(--color-text-muted);">
           <time datetime={pubDate.toISOString()}>Published {formattedPubDate}</time>
           {formattedUpdatedDate && (
             <time datetime={updatedDate.toISOString()}>Updated {formattedUpdatedDate}</time>
@@ -45,7 +45,7 @@ const formattedUpdatedDate = updatedDate ? new Date(updatedDate).toLocaleDateStr
         {tags && tags.length > 0 && (
           <div class="flex flex-wrap gap-2 pt-2">
             {tags.map(tag => (
-              <span class="text-xs px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+              <span class="text-xs px-3 py-1 rounded-full" style="background-color: var(--color-bg-muted); color: var(--color-text-main);">
                 {tag}
               </span>
             ))}
@@ -54,7 +54,7 @@ const formattedUpdatedDate = updatedDate ? new Date(updatedDate).toLocaleDateStr
       </div>
     </div>
 
-    <div class="prose prose-lg prose-gray max-w-none">
+    <div class="prose prose-lg prose-invert max-w-none">
       <Content />
     </div>
   </article>

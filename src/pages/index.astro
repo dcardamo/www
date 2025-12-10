@@ -54,7 +54,8 @@ const recentPosts = posts
           <h2 class="text-3xl font-light">Featured Projects</h2>
           <a
             href="/portfolio"
-            class="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            class="text-sm hover:opacity-70 transition-opacity"
+            style="color: var(--color-text-muted);"
           >
             View all →
           </a>
@@ -66,7 +67,7 @@ const recentPosts = posts
                 href={`/portfolio/${project.id}`}
                 class="group block space-y-4"
               >
-                <div class="overflow-hidden border border-gray-200">
+                <div class="overflow-hidden border" style="border-color: var(--color-border-main);">
                   <img
                     src={coverImage.src}
                     alt={project.data.title}
@@ -76,18 +77,18 @@ const recentPosts = posts
                   />
                 </div>
                 <div class="space-y-2">
-                  <h2 class="text-xl font-normal group-hover:text-gray-600 transition-colors">
+                  <h2 class="text-xl font-normal group-hover:opacity-70 transition-opacity">
                     {project.data.title}
                   </h2>
                   {project.data.date && (
-                    <p class="text-sm text-gray-500">{new Date(project.data.date).toLocaleDateString('en-US', {
+                    <p class="text-sm" style="color: var(--color-text-muted);">{new Date(project.data.date).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'long',
                       day: 'numeric'
                     })}</p>
                   )}
                   {project.data.description && (
-                    <p class="text-sm text-gray-700 line-clamp-2">{project.data.description}</p>
+                    <p class="text-sm line-clamp-2">{project.data.description}</p>
                   )}
                 </div>
               </a>
@@ -104,7 +105,8 @@ const recentPosts = posts
           <h2 class="text-3xl font-light">Recent Posts</h2>
           <a
             href="/blog"
-            class="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+            class="text-sm hover:opacity-70 transition-opacity"
+            style="color: var(--color-text-muted);"
           >
             View all →
           </a>
@@ -121,10 +123,10 @@ const recentPosts = posts
     {projectsWithCovers.length === 0 && recentPosts.length === 0 && (
       <div class="text-center py-20 space-y-4">
         <h1 class="text-4xl font-light">Welcome</h1>
-        <p class="text-lg text-gray-600">
+        <p class="text-lg">
           This is the personal website of Dan Cardamore
         </p>
-        <p class="text-gray-500">
+        <p class="text-sm" style="color: var(--color-text-muted);">
           Photography portfolio and blog coming soon
         </p>
       </div>

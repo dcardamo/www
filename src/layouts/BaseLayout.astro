@@ -18,6 +18,10 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap" rel="stylesheet" />
+
     <title>{title}</title>
     <meta name="description" content={description} />
     {canonicalURL && <link rel="canonical" href={canonicalURL} />}
@@ -28,22 +32,22 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
     <meta property="og:site_name" content="Dan Cardamore" />
     <meta property="og:type" content="website" />
   </head>
-  <body class="min-h-screen bg-white text-gray-900 font-light">
-    <header class="border-b border-gray-200">
+  <body class="min-h-screen font-sans" style="background-color: var(--color-bg-main); color: var(--color-text-main);">
+    <header>
       <nav class="container mx-auto px-6 py-6">
         <div class="flex items-center justify-between">
-          <a href="/" class="text-xl font-normal hover:text-gray-600 transition-colors">
+          <a href="/" class="text-xl font-serif font-medium hover:opacity-70 transition-opacity">
             Dan Cardamore
           </a>
-          <ul class="flex gap-8 text-sm">
+          <ul class="flex gap-8 text-sm font-serif">
             <li>
-              <a href="/" class="hover:text-gray-600 transition-colors">Home</a>
+              <a href="/" class="hover:underline hover:underline-offset-2 transition-all">Home</a>
             </li>
             <li>
-              <a href="/portfolio" class="hover:text-gray-600 transition-colors">Portfolio</a>
+              <a href="/portfolio" class="hover:underline hover:underline-offset-2 transition-all">Portfolio</a>
             </li>
             <li>
-              <a href="/blog" class="hover:text-gray-600 transition-colors">Blog</a>
+              <a href="/blog" class="hover:underline hover:underline-offset-2 transition-all">Blog</a>
             </li>
           </ul>
         </div>
@@ -54,9 +58,9 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
       <slot />
     </main>
 
-    <footer class="border-t border-gray-200 mt-24">
+    <footer class="mt-24">
       <div class="container mx-auto px-6 py-8">
-        <p class="text-sm text-gray-500 text-center">
+        <p class="text-sm opacity-70 text-center">
           © {new Date().getFullYear()} Dan Cardamore. All rights reserved.
         </p>
       </div>
