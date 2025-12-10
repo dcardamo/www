@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
 import { humanizeProjectName, findCoverImage, getNewestPhotoDate } from '../../utils/projects';
@@ -72,12 +73,13 @@ const sortedProjects = projects.sort((a, b) =>
             class="group block space-y-4"
           >
             <div class="overflow-hidden border border-gray-200">
-              <img
-                src={project.coverImage.src}
+              <Image
+                src={project.coverImage}
                 alt={project.title}
-                width={project.coverImage.width}
-                height={project.coverImage.height}
+                widths={[400, 800]}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="eager"
               />
             </div>
             <div class="space-y-2">

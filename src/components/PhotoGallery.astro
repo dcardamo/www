@@ -18,7 +18,7 @@ const { photos, showExif = false } = Astro.props;
 ---
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-  {photos.map(({ image, exif }) => (
+  {photos.map(({ image, exif }, index) => (
     <div class="space-y-3">
       <div class="overflow-hidden">
         <Image
@@ -27,7 +27,7 @@ const { photos, showExif = false } = Astro.props;
           widths={[400, 800]}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
           class="w-full aspect-[4/3] object-cover transition-transform duration-300 hover:scale-105 lightbox-image"
-          loading="lazy"
+          loading="eager"
           data-full-src={image.src}
         />
       </div>
