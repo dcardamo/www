@@ -7,7 +7,7 @@ install:
 
 # Remove build artifacts and dependencies
 clean:
-	rm -rf dist
+	rm -rf dist node_modules .astro
 
 # Start development server
 dev:
@@ -21,4 +21,5 @@ build:
 update:
 	git pull
 	$(MAKE) clean
+	$(MAKE) install
 	npm run build
