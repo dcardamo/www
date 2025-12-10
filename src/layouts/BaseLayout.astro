@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Lightbox from '../components/Lightbox.astro';
 
 interface Props {
   title: string;
@@ -65,5 +66,7 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
         </p>
       </div>
     </footer>
+
+    <Lightbox />
   </body>
 </html>
