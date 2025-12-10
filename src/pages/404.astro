@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Get all images from www/ directory
+const allWwwImages = import.meta.glob<{ default: ImageMetadata }>('/src/content/www/**/*.{jpg,jpeg,JPG,JPEG}', { eager: true });
+
+// Convert to array and pick a random image
+const imageEntries = Object.entries(allWwwImages);
+const randomImage = imageEntries.length > 0
+  ? imageEntries[Math.floor(Math.random() * imageEntries.length)][1].default
+  : null;
+---
+
+<BaseLayout
+  title="Page Not Found - Dan Cardamore"
+  description="The page you're looking for doesn't exist"
+>
+  <div class="max-w-4xl mx-auto text-center space-y-12">
+    <div class="space-y-6">
+      <h1 class="text-6xl font-light">404</h1>
+      <p class="text-2xl">Page Not Found</p>
+      <p class="text-lg" style="color: var(--color-text-muted);">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+    </div>
+
+    {randomImage && (
+      <div class="max-w-xl mx-auto">
+        <div class="overflow-hidden border" style="border-color: var(--color-border-main);">
+          <Image
+            src={randomImage}
+            alt="Random photo from portfolio"
+            widths={[600, 800]}
+            sizes="(max-width: 768px) 100vw, 600px"
+            class="w-full aspect-[4/3] object-cover max-h-[40vh]"
+          />
+        </div>
+        <p class="mt-4 text-sm" style="color: var(--color-text-muted);">
+          Here's a random photo from my portfolio while you're here
+        </p>
+      </div>
+    )}
+
+    <div class="space-y-4">
+      <p class="text-lg">
+        Redirecting to home page in <span id="countdown">10</span> seconds...
+      </p>
+      <div class="flex gap-4 justify-center">
+        <a
+          href="/"
+          class="px-6 py-3 border hover:opacity-70 transition-opacity"
+          style="border-color: var(--color-border-main);"
+        >
+          Go Home Now
+        </a>
+        <a
+          href="/portfolio"
+          class="px-6 py-3 border hover:opacity-70 transition-opacity"
+          style="border-color: var(--color-border-main);"
+        >
+          View Portfolio
+        </a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  let seconds = 10;
+  const countdownEl = document.getElementById('countdown');
+
+  const interval = setInterval(() => {
+    seconds--;
+    if (countdownEl) {
+      countdownEl.textContent = seconds.toString();
+    }
+
+    if (seconds <= 0) {
+      clearInterval(interval);
+      window.location.href = '/';
+    }
+  }, 1000);
+</script>
