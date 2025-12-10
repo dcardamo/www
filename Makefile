@@ -19,7 +19,8 @@ dev:
 build:
 	npm run build
 
-# Pull latest changes and build
+# Pull latest changes, clean, and build
 update:
 	git pull
+	$(MAKE) clean
 	npm run build
