@@ -41,6 +41,16 @@
   let currentImages: HTMLImageElement[] = [];
   let currentIndex = 0;
 
+  function getImageId(img: HTMLImageElement): string {
+    // Create a unique ID from the image src path
+    const fullSrc = img.getAttribute('data-full-src') || img.src;
+    // Remove query parameters if present
+    const srcWithoutQuery = fullSrc.split('?')[0];
+    const match = srcWithoutQuery.match(/\/([^\/]+)\.(?:jpg|jpeg|JPG|JPEG)$/i);
+    const id = match ? match[1] : '';
+    return id;
+  }
+
   function openLightbox(img: HTMLImageElement, images: HTMLImageElement[]) {
     currentImages = images;
     currentIndex = images.indexOf(img);
@@ -54,6 +64,8 @@
     lightbox?.classList.add('hidden');
     lightbox?.classList.remove('flex');
     document.body.style.overflow = '';
+    // Remove the hash from URL
+    history.pushState(null, '', window.location.pathname);
   }
 
   function showImage(index: number) {
@@ -67,6 +79,12 @@
       const fullSrc = img.getAttribute('data-full-src') || img.src;
       lightboxImage.src = fullSrc;
       lightboxImage.alt = img.alt;
+
+      // Update URL with image ID
+      const imageId = getImageId(img);
+      if (imageId) {
+        history.pushState(null, '', `#${imageId}`);
+      }
     }
   }
 
@@ -111,9 +129,25 @@
     });
   }
 
+  // Check if URL has a hash on page load and open that image
+  function checkHashOnLoad() {
+    const hash = window.location.hash.slice(1); // Remove the #
+    if (hash) {
+      const portfolioImages = Array.from(document.querySelectorAll('.lightbox-image')) as HTMLImageElement[];
+      const targetImage = portfolioImages.find(img => getImageId(img) === hash);
+      if (targetImage) {
+        openLightbox(targetImage, portfolioImages);
+      }
+    }
+  }
+
   // Run on page load
   initializeLightbox();
+  checkHashOnLoad();
 
   // Re-run after view transitions (if using Astro view transitions)
-  document.addEventListener('astro:page-load', initializeLightbox);
+  document.addEventListener('astro:page-load', () => {
+    initializeLightbox();
+    checkHashOnLoad();
+  });
 </script>

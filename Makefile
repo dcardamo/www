@@ -1,4 +1,9 @@
-.PHONY: clean dev build
+.PHONY: clean dev build install
+
+# Install dependencies and disable telemetry
+install:
+	npm install
+	npx astro telemetry disable
 
 # Remove build artifacts and dependencies
 clean:
