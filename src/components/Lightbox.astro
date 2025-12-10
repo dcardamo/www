@@ -46,7 +46,8 @@
     const fullSrc = img.getAttribute('data-full-src') || img.src;
     // Remove query parameters if present
     const srcWithoutQuery = fullSrc.split('?')[0];
-    const match = srcWithoutQuery.match(/\/([^\/]+)\.(?:jpg|jpeg|JPG|JPEG)$/i);
+    // Match filename and remove Astro's content hash (e.g., .Bu3STEnw)
+    const match = srcWithoutQuery.match(/\/([^\/]+?)(?:\.[A-Za-z0-9_-]{8})?\.(?:jpg|jpeg|JPG|JPEG)$/i);
     const id = match ? match[1] : '';
     return id;
   }
