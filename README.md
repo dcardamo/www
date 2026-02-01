@@ -246,3 +246,6 @@ npm run astro check
 ## License
 
 © 2024 Dan Cardamore. All rights reserved.
+
+---
+*Last updated: 2026-02-01*
