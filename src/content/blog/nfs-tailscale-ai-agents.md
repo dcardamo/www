@@ -3,7 +3,7 @@ title: "Giving AI Agents Secure File Access with NFS over Tailscale"
 description: "How to safely share files with sandboxed AI agents using NFS mounts over a Tailscale mesh network"
 pubDate: 2026-02-02
 author: "Dan"
-draft: true
+draft: false
 tags: ["ai", "self-hosting", "tailscale", "nfs", "security"]
 ---
 
