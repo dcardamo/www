@@ -12,7 +12,16 @@ const sortedPosts = posts.sort((a, b) =>
 <BaseLayout title="Blog - Dan Cardamore" description="Thoughts and writings by Dan Cardamore">
   <div class="max-w-3xl mx-auto space-y-12">
     <div class="space-y-4">
-      <h1 class="text-4xl font-light">Blog</h1>
+      <div class="flex items-center justify-between">
+        <h1 class="text-4xl font-light">Blog</h1>
+        <a href="/rss.xml" class="text-orange-500 hover:text-orange-600 flex items-center gap-1" title="RSS Feed">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="6.18" cy="17.82" r="2.18"/>
+            <path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9z"/>
+          </svg>
+          <span class="text-sm">RSS</span>
+        </a>
+      </div>
       <p class="text-lg text-gray-600">Thoughts, stories, and ideas</p>
     </div>
 

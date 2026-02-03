@@ -33,6 +33,9 @@ const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : null
     {canonicalURL && <meta property="og:url" content={canonicalURL} />}
     <meta property="og:site_name" content="Dan Cardamore" />
     <meta property="og:type" content="website" />
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Dan Cardamore's Blog" href="/rss.xml" />
   </head>
   <body class="min-h-screen font-sans" style="background-color: var(--color-bg-main); color: var(--color-text-main);">
     <header>

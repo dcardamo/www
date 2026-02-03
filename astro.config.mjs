@@ -8,6 +8,9 @@ export default defineConfig({
   site: "https://dan.cardamore.ca",
   vite: {
     plugins: [tailwindcss()],
+    server: {
+      allowedHosts: ["dan-dev.cardamore.ca", "dev.cardamore.ca", "localhost"],
+    },
   },
   image: {
     service: {
