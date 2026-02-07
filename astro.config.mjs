@@ -7,7 +7,7 @@ import tailwindcss from "@tailwindcss/vite";
 // https://astro.build/config
 export default defineConfig({
   site: "https://dan.cardamore.ca",
-  output: "hybrid", // Enable server-side rendering for API routes
+  output: "server", // Enable server-side rendering for API routes
   adapter: node({
     mode: "standalone"
   }),
