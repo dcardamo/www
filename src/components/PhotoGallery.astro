@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Image, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import ExifDisplay from './ExifDisplay.astro';
 import type { PhotoExif } from '../utils/exif';
@@ -15,6 +15,13 @@ interface Props {
 }
 
 const { photos, showExif = false } = Astro.props;
+
+// Generate optimized lightbox images (2000px wide WebP instead of raw originals)
+const lightboxImages = await Promise.all(
+  photos.map(({ image }) =>
+    getImage({ src: image, width: 2000, format: 'webp' })
+  )
+);
 ---
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -24,11 +31,12 @@ const { photos, showExif = false } = Astro.props;
         <Image
           src={image}
           alt=""
-          widths={[400, 800]}
+          widths={[400, 800, 1200, 1600]}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          format="avif"
           class="w-full aspect-[4/3] object-cover transition-transform duration-300 hover:scale-105 lightbox-image"
-          loading="eager"
-          data-full-src={image.src}
+          loading="lazy"
+          data-full-src={lightboxImages[index].src}
         />
       </div>
       {showExif && exif && (

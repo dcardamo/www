@@ -25,8 +25,9 @@ const formattedDate = new Date(date).toLocaleDateString('en-US', {
     <Image
       src={coverImageSrc}
       alt={title}
-      widths={[400, 800]}
+      widths={[400, 800, 1200, 1600]}
       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+      format="avif"
       class="w-full aspect-[4/3] object-cover transition-transform duration-300 group-hover:scale-105"
     />
   </div>
