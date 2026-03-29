@@ -4,7 +4,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogPostCard from '../../components/BlogPostCard.astro';
 
 const posts = await getCollection('blog');
-const sortedPosts = posts.sort((a, b) =>
+const publishedPosts = posts.filter(post => post.data.status === 'published');
+const sortedPosts = publishedPosts.sort((a, b) =>
   new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime()
 );
 ---
