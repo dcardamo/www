@@ -32,6 +32,7 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     updatedDate: z.coerce.date().optional(),
     author: z.string().default("Dan"),
+    status: z.enum(["draft", "published"]).default("draft"),
     featured: z.boolean().default(false),
     tags: z.array(z.string()).optional(),
   }),

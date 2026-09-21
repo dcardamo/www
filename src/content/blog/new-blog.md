@@ -3,6 +3,7 @@ title: "Building My Own Web Presence"
 description: "Creating and self-hosting a new personal website for photography and blogging"
 pubDate: 2024-12-09
 author: "Dan"
+status: "published"
 featured: true
 tags: ["web development", "self-hosting", "personal website"]
 ---
